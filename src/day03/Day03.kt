@@ -45,7 +45,7 @@ fun main() {
 
         return input.getNumbers().filter {
             symbolNextToNumber(it.row, it.startColumn, it.length)
-        }.also { println(it) }.sumOf { it.number }
+        }.sumOf { it.number }
     }
 
     fun part2(input: List<String>): Long {
@@ -55,10 +55,10 @@ fun main() {
             row.withIndex()
                 .filter { it.value == '*' }
                 .map { column ->
-                    column to numbers.filter { it.row in (rowIndex - 1)..(rowIndex + 1) && column.index in (it.startColumn - 1)..(it.startColumn + it.length) }
+                    numbers.filter { it.row in (rowIndex - 1)..(rowIndex + 1) && column.index in (it.startColumn - 1)..(it.startColumn + it.length) }
                 }
-                .filter { it.second.size == 2 }
-                .sumOf { it.second[0].number * it.second[1].number }.toLong()
+                .filter { it.size == 2 }
+                .sumOf { it[0].number * it[1].number }.toLong()
         }
     }
 
