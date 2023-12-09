@@ -1,6 +1,7 @@
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
+import kotlin.math.max
 
 class Utils(val day: Int) {
     private val dayString: String = day.toString().padStart(2, '0')
@@ -70,3 +71,29 @@ infix fun Long.divisibleBy(other: Long): Boolean = this % other == 0L
 
 fun Int.nextIndexOf(collection: Collection<*>): Int = (this + 1) % collection.size
 fun Int.nextIndexOf(collection: CharSequence): Int = (this + 1) % collection.length
+
+fun <T> List<T>.asInfiniteLoop(): Iterator<T> {
+    var index = 0
+    return generateSequence {
+        val next = this[index]
+        index = index.nextIndexOf(this)
+        return@generateSequence next
+    }.iterator()
+}
+
+fun leastCommonMultiply(a: Long, b: Long): Long {
+    val larger = max(a, b)
+    val maxLcm = a * b
+    var lcm = larger
+    while (lcm <= maxLcm) {
+        if (lcm.divisibleBy(a) && lcm.divisibleBy(b)) return lcm
+        lcm += larger
+    }
+    return maxLcm
+}
+
+fun List<Int>.leastCommonMultiply(): Long = this.map(Int::toLong).reduce { acc, i ->
+    leastCommonMultiply(acc, i)
+}
+
+
